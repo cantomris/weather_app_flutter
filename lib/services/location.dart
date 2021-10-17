@@ -13,7 +13,7 @@ class Location {
       latitude = position.latitude;
       longitude = position.longitude;
     } catch (exception) {
-      print(exception);
+      debugPrint(exception.toString());
     }
   }
 }
