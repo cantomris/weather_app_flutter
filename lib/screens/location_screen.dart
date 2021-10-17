@@ -15,6 +15,7 @@ class _LocationScreenState extends State<LocationScreen> {
   String? weatherIcon;
   String? city;
   late String weatherMessage;
+  final _isNight = true;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _LocationScreenState extends State<LocationScreen> {
         city = '';
         return;
       }
+
       double temp = weatherData['main']['temp'];
       temperature = temp.toInt();
       var condition = weatherData['weather'][0]['id'];
@@ -44,70 +46,137 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('images/location_background.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
-          ),
-        ),
-        constraints: const BoxConstraints.expand(),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () async {
-                      var weatherData = await weather.getLocationWeather();
-                      updateUI(weatherData);
-                    },
-                    child: const Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
-                  ),
-                ],
+      body: _isNight
+          ? Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: const AssetImage('images/nightCity_background.jpg'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.8), BlendMode.dstATop),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Row(
+              constraints: const BoxConstraints.expand(),
+              child: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Text(
-                      '$temperature°',
-                      style: kTempTextStyle,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () async {
+                            var weatherData =
+                                await weather.getLocationWeather();
+                            updateUI(weatherData);
+                          },
+                          child: const Icon(
+                            Icons.near_me_outlined,
+                            size: 50.0,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Icon(
+                            Icons.location_city_rounded,
+                            size: 50.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      weatherIcon.toString(),
-                      style: kConditionTextStyle,
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '$temperature°',
+                            style: kTempTextStyle,
+                          ),
+                          Text(
+                            weatherIcon.toString(),
+                            style: kConditionTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        '$weatherMessage in $city',
+                        textAlign: TextAlign.right,
+                        style: kMessageTextStyle,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  '$weatherMessage in $city',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+            )
+          : Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: const AssetImage('images/location_background.jpg'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.8), BlendMode.dstATop),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+              constraints: const BoxConstraints.expand(),
+              child: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () async {
+                            var weatherData =
+                                await weather.getLocationWeather();
+                            updateUI(weatherData);
+                          },
+                          child: const Icon(
+                            Icons.near_me_outlined,
+                            size: 50.0,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Icon(
+                            Icons.location_city_rounded,
+                            size: 50.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '$temperature°',
+                            style: kTempTextStyle,
+                          ),
+                          Text(
+                            weatherIcon.toString(),
+                            style: kConditionTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        '$weatherMessage in $city',
+                        textAlign: TextAlign.right,
+                        style: kMessageTextStyle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
